@@ -16,7 +16,7 @@ StudioSchema.virtual('url').get(function() {
 });
 
 // Virtual for formatted founded date of studio
-StudioSchema.virtual('founded_formatted').get(function() {
+StudioSchema.virtual('founded-formatted').get(function() {
   return DateTime.fromJSDate(this.founded).toLocaleString(DateTime.DATE_MED);
 });
 
