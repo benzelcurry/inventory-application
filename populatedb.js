@@ -31,16 +31,16 @@ var gameInstances = []
 function consoleCreate(name, about, release, cb) {
   consoledetail = { name: name, about: about, release: release }
 
-  const console = new Console(consoledetail);
+  const gameConsole = new Console(consoledetail);
        
-  console.save(function (err) {
+  gameConsole.save(function (err) {
     if (err) {
       cb(err, null)
       return
     }
-    console.log('New Console: ' + console);
+    console.log('New Console: ' + gameConsole);
     consoles.push(consoles)
-    cb(null, console)
+    cb(null, gameConsole)
   }  );
 }
 
@@ -60,7 +60,7 @@ function studioCreate(name, location, about, founded, cb) {
   }   );
 }
 
-function gameCreate(name, studio, about, relase, cb) {
+function gameCreate(name, studio, about, release, cb) {
   gamedetail = { name: name, studio: studio, about: about, release: release };
 
   const game = new Game(gamedetail);
@@ -89,7 +89,7 @@ function gameInstanceCreate(game, condition, price, cb) {
     }
     console.log('New GameInstance: ' + gameInstance);
     gameInstances.push(gameInstance);
-    cb(null, book);
+    cb(null, gameInstance);
   }  );
 }
 
