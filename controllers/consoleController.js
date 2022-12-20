@@ -1,8 +1,38 @@
 const Console = require('../models/console');
+const Studio = require('../models/studio');
+const Game = require('../models/game');
+const GameInstance = require('../models/gameInstance');
+
 const async = require('async');
 
+exports.index = (req, res) => {
+  async.parallel(
+    {
+      console_count(callback) {
+        Console.countDocuments({}, callback); // Passes an empty object as match condition to find all documents within collection
+      },
+      studio_count(callback) {
+        Studio.countDocuments({}, callback);
+      },
+      game_count(callback) {
+        Game.countDocuments({}, callback);
+      },
+      gameInstance_count(callback) {
+        GameInstance.countDocuments({}, callback);
+      }
+    },
+    (err, results) => {
+      res.render('index', {
+        title: 'Retro Game eStore',
+        error: err,
+        data: results,
+      });
+    }
+  );
+}
+
 // Display list of all Consoles
-exports.console_list = function (req, res, next) => {
+exports.console_list = function (req, res, next) {
   Console.find()
     .sort(['release', 'ascending'])
     .exec(function (err, list_consoles) {
