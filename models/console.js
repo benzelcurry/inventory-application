@@ -15,7 +15,7 @@ ConsoleSchema.virtual('url').get(function() {
 });
 
 // Virtual for formatted release date of console
-ConsoleSchema.virtual('release-formatted').get(function() {
+ConsoleSchema.virtual('release_formatted').get(function() {
   return DateTime.fromJSDate(this.release).toLocaleString(DateTime.DATE_MED);
 });
 

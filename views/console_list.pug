@@ -1,4 +1,11 @@
 extends layout 
 
 block content 
-  p console_list not yet created
+  h1= title 
+
+  ul 
+    each item in console_list 
+      li 
+        a(href=item.url) #{item.name} 
+    else 
+      li There are no consoles.

@@ -68,9 +68,10 @@ exports.console_detail = (req, res, next) => {
         return next(err);
       }
       // Successful, so render
-      res.render('author_detail', {
+      res.render('console_detail', {
         title: 'Console Info',
-        console: results.console
+        // Using 'vgconsole' because 'console' is a reserved word in Pug
+        vgconsole: results.console
       });
     }
   );

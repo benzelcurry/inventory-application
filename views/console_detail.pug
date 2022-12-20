@@ -1,0 +1,12 @@
+extends layout 
+
+block content 
+
+  h1 Console: #{vgconsole.name} 
+  
+  div 
+    h3 Release Date: 
+    div.release #{vgconsole.release_formatted} 
+
+    h3 About 
+    div.about #{vgconsole.about} 

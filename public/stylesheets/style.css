@@ -10,6 +10,7 @@ h1 {
 body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   height: 100vh;
+  width: 100vw;
 }
 
 a {
@@ -30,7 +31,7 @@ a {
 }
 
 .sidebar {
-  width: 300px;
+  min-width: 300px;
   background-color: rgb(160, 100, 100);
 }
 
