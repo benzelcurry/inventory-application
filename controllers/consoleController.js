@@ -34,7 +34,7 @@ exports.index = (req, res) => {
 // Display list of all Consoles
 exports.console_list = function (req, res, next) {
   Console.find()
-    .sort(['release', 'ascending'])
+    .sort([['release', 'ascending']])
     .exec(function (err, list_consoles) {
       if (err) {
         return next(err);

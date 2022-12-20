@@ -1,8 +1,40 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  margin: 0;
+}
+
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  height: 100vh;
 }
 
 a {
   color: #00B7FF;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  background-color: grey;
+}
+
+.main-content {
+  display: flex;
+  min-height: calc(100% - 100px);
+}
+
+.sidebar {
+  width: 300px;
+  background-color: rgb(160, 100, 100);
+}
+
+.info {
+  margin: 0;
+  padding: 50px;
 }
