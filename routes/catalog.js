@@ -19,4 +19,7 @@ router.get('/consoles/:id', console_controller.console_detail);
 // GET request for lists of all Game items
 router.get('/games', game_controller.game_list);
 
+// GET request for Game details
+router.get('/games/:id', game_controller.game_detail);
+
 module.exports = router;

@@ -1,0 +1,24 @@
+extends layout 
+
+block content 
+  h1= title
+
+  h4 Release date
+  div #{game.release_formatted}
+
+  h4 Console 
+  if game.console 
+    div #{game.console} 
+  else 
+    div No console info available 
+  
+  h4 About 
+  div #{game.about}
+
+  h4 Copies for sale 
+  ul 
+    each item in game_instances 
+      li
+        a(href=item.url) #{game.name} - #{item.condition} 
+    else 
+      li There are no copies of this game available.

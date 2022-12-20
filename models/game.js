@@ -13,7 +13,7 @@ const GameSchema = new Schema({
 });
 
 GameSchema.virtual('url').get(function() {
-  return `/catalog/book/${this._id}`;
+  return `/catalog/games/${this._id}`;
 });
 
 GameSchema.virtual('release_formatted').get(function() {
