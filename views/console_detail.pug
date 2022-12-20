@@ -10,3 +10,14 @@ block content
 
     h3 About 
     div.about #{vgconsole.about} 
+
+    h3 Games 
+    ul
+      each game in console_games 
+        li
+          div 
+            div #{game.name} 
+            div #{game.release} 
+            div #{game.about} 
+      else 
+        div There are no games in stock for this console

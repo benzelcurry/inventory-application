@@ -9,6 +9,7 @@ const GameSchema = new Schema({
   studio: { type: Schema.Types.ObjectId, ref: 'Studio', required: true },
   about: { type: String, required: false, maxLength: 1000 },
   release: { type: Date },
+  console: { type: Schema.Types.ObjectId, ref: 'Console', required: true },
 });
 
 GameSchema.virtual('url').get(function() {

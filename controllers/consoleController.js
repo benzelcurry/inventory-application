@@ -54,6 +54,9 @@ exports.console_detail = (req, res, next) => {
     {
       console(callback) {
         Console.findById(req.params.id).exec(callback);
+      },
+      console_games(callback) {
+        Game.find({ console: req.params.id }, "name about release").exec(callback);
       }
     },
     (err, results) => {
@@ -71,7 +74,8 @@ exports.console_detail = (req, res, next) => {
       res.render('console_detail', {
         title: 'Console Info',
         // Using 'vgconsole' because 'console' is a reserved word in Pug
-        vgconsole: results.console
+        vgconsole: results.console,
+        console_games: results.console_games,
       });
     }
   );
