@@ -20,7 +20,7 @@ GameInstanceSchema.virtual('url').get(function() {
 });
 
 // Virtual for formatted price
-GameInstanceSchema.virtual('formatted-price').get(function() {
+GameInstanceSchema.virtual('formatted_price').get(function() {
   const newPrice = this.price.toFixed(2);
 
   return `$${newPrice}`;

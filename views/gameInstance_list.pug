@@ -1,0 +1,12 @@
+extends layout 
+
+block content 
+  h1= title 
+
+  ul 
+    each item in gameInstance_list 
+      li 
+        a(href=item.url) #{item.game.name} - #{item.condition} -  #{item.formatted_price}
+
+    else 
+      li There are no games for sale at this time.
