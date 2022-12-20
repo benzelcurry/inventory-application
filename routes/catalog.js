@@ -32,4 +32,7 @@ router.get('/games/:id', game_controller.game_detail);
 // GET request for list of all Game Instance items
 router.get('/listings', gameInstance_controller.gameInstance_list);
 
+// GET request for Game Instance details
+router.get('/listings/:id', gameInstance_controller.gameInstance_detail);
+
 module.exports = router;

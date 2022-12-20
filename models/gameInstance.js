@@ -16,7 +16,7 @@ const GameInstanceSchema = new Schema({
 
 // Virtual for game instance URL
 GameInstanceSchema.virtual('url').get(function() {
-  return `/catalog/gameinstance/${this._id}`;
+  return `/catalog/listings/${this._id}`;
 });
 
 // Virtual for formatted price

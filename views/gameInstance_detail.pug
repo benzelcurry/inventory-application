@@ -1,0 +1,11 @@
+extends layout 
+
+block content 
+  h1= title
+
+  h4 Condition: #{gameinstance.condition} 
+
+  h4 Price: #{gameinstance.formatted_price} 
+
+  h4
+    a(href=gameinstance.game.url) Game info page
