@@ -1,0 +1,11 @@
+extends layout 
+
+block content 
+  h1= title 
+
+  ul 
+    each item in game_list 
+      li 
+        a(href=item.url) #{item.name} - #{item.release_formatted}
+    else 
+      li There are no games.

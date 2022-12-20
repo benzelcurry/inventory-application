@@ -16,4 +16,8 @@ GameSchema.virtual('url').get(function() {
   return `/catalog/book/${this._id}`;
 });
 
+GameSchema.virtual('release_formatted').get(function() {
+  return DateTime.fromJSDate(this.release).toLocaleString(DateTime.DATE_MED);
+});
+
 module.exports = mongoose.model('Game', GameSchema);
