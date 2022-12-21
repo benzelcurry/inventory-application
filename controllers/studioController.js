@@ -51,3 +51,8 @@ exports.studio_detail = (req, res, next) => {
     }
   );
 }
+
+// Display Studio create form on GET
+exports.studio_create_get = (req, res, next) => {
+  res.render('studio_form', { title: 'Add Studio' });
+}

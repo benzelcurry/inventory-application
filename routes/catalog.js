@@ -24,6 +24,9 @@ router.get('/consoles/:id', console_controller.console_detail);
 // GET request for list of all Studio items
 router.get('/studios', studio_controller.studio_list);
 
+// GET request for creating Studio
+router.get('/studios/create', studio_controller.studio_create_get);
+
 // GET request for Studio details
 router.get('/studios/:id', studio_controller.studio_detail);
 

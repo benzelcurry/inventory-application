@@ -1,0 +1,24 @@
+extends layout 
+
+block content 
+  h1= title 
+
+  form(method='POST' action='') 
+    div.form-group 
+      label(for='studio_name') Studio: 
+      input#studio_name.form-control(type='text' placeholder='Studio' name='studio_name' required='true' value=(undefined===studio ? '' : studio_name))
+    div.form-group 
+      label(for='studio_location') Location: 
+      input#studio_location.form-control(type='text' placeholder='Location' name='studio_location' required='true' value=(undefined===studio ? '' : studio_location))
+    div.form-group 
+      label(for='studio_about') About: 
+      input#studio_about.form-control(type='text' placeholder='About' name='studio_about' required='true' value=(undefined===studio ? '' : studio_about))
+    div.form-group 
+      label(for='studio_founded') Founded: 
+      input#studio_founded.form-control(type='date' name='studio_founded' value=(undefined===studio ? '' : studio_founded))
+    button.btn(type='submit') Submit
+    if errors 
+      ul 
+        for error in errors 
+          li!= error.msg
+  
