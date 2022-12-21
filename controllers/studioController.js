@@ -113,3 +113,32 @@ exports.studio_create_post = [
     });
   },
 ]
+
+// Display Studio delete form on GET
+exports.studio_delete_get = (req, res, next) => {
+  async.parallel(
+    {
+      studio(callback) {
+        Studio.findById(req.params.id).exec(callback);
+      },
+      studio_games(callback) {
+        Game.find({ studio: req.params.id }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      if (results.studio == null) {
+        // No results
+        res.redirect('/catalog/studios');
+      }
+      // Successful, so render
+      res.render('studio_delete', {
+        title: 'Delete Studio',
+        studio: results.studio,
+        studio_games: results.studio_games,
+      });
+    }
+  );
+}

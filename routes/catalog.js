@@ -30,6 +30,9 @@ router.get('/studios/create', studio_controller.studio_create_get);
 // POST request for creating Studio
 router.post('/studios/create', studio_controller.studio_create_post);
 
+// GET request to delete Studio
+router.get('/studios/:id/delete', studio_controller.studio_delete_get);
+
 // GET request for Studio details
 router.get('/studios/:id', studio_controller.studio_detail);
 
