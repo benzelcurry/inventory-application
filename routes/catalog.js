@@ -3,6 +3,7 @@ const router = express.Router();
 
 // Require controller modules
 const console_controller = require('../controllers/consoleController');
+const studio_controller = require('../controllers/studioController');
 const game_controller = require('../controllers/gameController');
 const gameInstance_controller = require('../controllers/gameInstanceController');
 
@@ -16,6 +17,12 @@ router.get('/consoles', console_controller.console_list);
 
 // GET request for Console details.
 router.get('/consoles/:id', console_controller.console_detail);
+
+
+/// STUDIO ROUTES /// 
+
+// GET request for list of all Studio items
+router.get('/studios', studio_controller.studio_list);
 
 
 /// GAME ROUTES ///
