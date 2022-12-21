@@ -27,6 +27,9 @@ router.get('/studios', studio_controller.studio_list);
 // GET request for creating Studio
 router.get('/studios/create', studio_controller.studio_create_get);
 
+// POST request for creating Studio
+router.post('/studios/create', studio_controller.studio_create_post);
+
 // GET request for Studio details
 router.get('/studios/:id', studio_controller.studio_detail);
 

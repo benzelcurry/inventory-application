@@ -2,7 +2,7 @@ const Studio = require('../models/studio');
 const Game = require('../models/game');
 
 const async = require('async');
-const studio = require('../models/studio');
+const { body, validationResult } = require('express-validator');
 
 // Display list of all Studios
 exports.studio_list = function (req, res, next) {
@@ -39,7 +39,7 @@ exports.studio_detail = (req, res, next) => {
       }
       if (results.studio == null) {
         // No results
-        const err = new Error('Author not found');
+        const err = new Error('Studio not found');
         err.status = 404;
         return next(err);
       }
@@ -56,3 +56,60 @@ exports.studio_detail = (req, res, next) => {
 exports.studio_create_get = (req, res, next) => {
   res.render('studio_form', { title: 'Add Studio' });
 }
+
+// Handle Studio create on POST
+exports.studio_create_post = [
+  // Validate and sanitize fields
+  body("studio_name")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("Studio name must be specified.")
+    .isAlphanumeric()
+    .withMessage("Studio name has non-alphanumeric characters."),
+  body("studio_about")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("Studio 'about' must be specified."),
+  body("studio_location")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("Studio location name must be specified."),
+  body("studio_date", "Invalid date")
+    .optional({ checkFalsy: true })
+    .isISO8601()
+    .toDate(),
+  // Process request after validation and sanitization.
+  (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render form again with sanitized values/errors messages.
+      res.render("studio_form", {
+        title: "Add Studio",
+        studio: req.body,
+        errors: errors.array(),
+      });
+      return;
+    }
+    // Data from form is valid.
+
+    // Create a Studio object with escaped and trimmed data.
+    const studio = new Studio({
+      name: req.body.studio_name,
+      about: req.body.studio_about,
+      location: req.body.studio_location,
+      founded: req.body.studio_founded,
+    });
+    studio.save((err) => {
+      if (err) {
+        return next(err);
+      }
+      // Successful - redirect to new studio record.
+      res.redirect(studio.url);
+    });
+  },
+]
