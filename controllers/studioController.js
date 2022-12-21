@@ -142,3 +142,40 @@ exports.studio_delete_get = (req, res, next) => {
     }
   );
 }
+
+// Handle Studio delete on POST
+exports.studio_delete_post = (req, res, next) => {
+  async.parallel(
+    {
+      studio(callback) {
+        Studio.findById(req.body.studioid).exec(callback);
+      },
+      studio_games(callback) {
+        Game.find({ studio: req.body.studioid }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      // Success
+      if (results.studio_games.length > 0) {
+        // Studio has games. Render in same was as for GET route
+        res.render('studio_delete', {
+          title: 'Delete Studio',
+          studio: results.studio,
+          studio_games: results.studio_games,
+        });
+        return;
+      }
+      // Studio has no games. Delete object and redirect to the list of studios.
+      Studio.findByIdAndRemove(req.body.studioid, (err) => {
+        if (err) {
+          return next(err);
+        }
+        // Success - go to studio list
+        res.redirect('/catalog/studios');
+      });
+    }
+  );
+}
