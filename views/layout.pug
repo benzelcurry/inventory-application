@@ -11,15 +11,19 @@ html
     div.main-content 
       div.sidebar 
         ul.sidebar-nav 
-          li 
-            a(href='/catalog') Home
-          li 
-            a(href='/catalog/consoles') Consoles 
-          li 
-            a(href='/catalog/studios') Studios
-          li 
-            a(href='/catalog/games') Games
-          li 
-            a(href='/catalog/listings') Listings
+          div.sidebar-lists
+            li 
+              a(href='/catalog') Home
+            li 
+              a(href='/catalog/consoles') Consoles 
+            li 
+              a(href='/catalog/studios') Studios
+            li 
+              a(href='/catalog/games') Games
+            li 
+              a(href='/catalog/listings') Listings
+          div.sidebar-updates 
+            li
+              a(href='/catalog/consoles/create') Add new console
       div.info
         block content
