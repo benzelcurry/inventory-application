@@ -1,0 +1,22 @@
+extends layout 
+
+block content 
+  h1= studio.name 
+
+  h2 Location 
+  div= studio.location
+
+  h2 Founded
+  div= studio.founded_formatted 
+
+  h2 About 
+  div= studio.about 
+
+  h2 Games 
+  ul 
+    each game in games 
+      li 
+        a(href=game.url) #{game.name} 
+    
+    else
+      li There are no games listed for this studio.
