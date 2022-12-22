@@ -1,0 +1,33 @@
+extends layout 
+
+block content 
+  h1= title 
+
+  form(method='POST' action='') 
+    div.form-group 
+      label(for='game_name') Game: 
+      input#game_name.form-control(type='text' placeholder='Game' name='game_name' required='true' value=(undefined===game ? '' : game_name))
+    div.form-group 
+      label(for='game_studio') Studio: 
+      select#studio.form-control(type='select' placeholder='Select studio' name='studio' required='true' )
+        - studios.sort(function(a, b) {let textA = a.name.toUpperCase(); let textB = b.name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+        for studio in studios
+            option(value=studio._id) #{studio.name}
+    div.form-group 
+      label(for='game_console') Console: 
+      select#console.form-control(type='select' placeholder='Select console' name='console' required='true' )
+        - consoles.sort(function(a, b) {let textA = a.name.toUpperCase(); let textB = b.name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+        for item in consoles 
+          option(value=item._id) #{item.name}
+    div.form-group 
+      label(for='game_about') About: 
+      input#game_about.form-control(type='text' placeholder='About' name='game_about' required='true' value=(undefined===game ? '' : game_about))
+    div.form-group 
+      label(for='game_released') Released: 
+      input#game_released.form-control(type='date' name='game_released' required='true' value=(undefined===game ? '' : game_released))
+    button.btn(type='submit') Submit
+
+    if errors 
+      ul 
+        for error in errors 
+          li!= error.msg

@@ -1,4 +1,6 @@
 const Game = require('../models/game');
+const Studio = require('../models/studio');
+const Console = require('../models/console');
 
 const async = require('async');
 const gameInstance = require('../models/gameInstance');
@@ -46,6 +48,30 @@ exports.game_detail = (req, res, next) => {
         title: results.game.name,
         game: results.game,
         game_instances: results.game_instance,
+      });
+    }
+  );
+}
+
+// Display Game creation form on GET
+exports.game_create_get = (req, res, next) => {
+  async.parallel(
+    {
+      consoles(callback) {
+        Console.find(callback);
+      },
+      studios(callback) {
+        Studio.find(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      res.render('game_form', {
+        title: 'Add Game',
+        consoles: results.consoles,
+        studios: results.studios,
       });
     }
   );

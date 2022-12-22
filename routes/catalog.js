@@ -57,6 +57,9 @@ router.get('/studios/:id', studio_controller.studio_detail);
 // GET request for list of all Game items
 router.get('/games', game_controller.game_list);
 
+// GET request for creating Game
+router.get('/games/create', game_controller.game_create_get);
+
 // GET request for Game details
 router.get('/games/:id', game_controller.game_detail);
 
