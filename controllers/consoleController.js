@@ -113,7 +113,7 @@ exports.console_create_post = [
       // There are errors. Render form again with sanitized values/errors messages.
       res.render("console_form", {
         title: "Add Console",
-        console: req.body,
+        vgconsole: req.body,
         errors: errors.array(),
       });
       return;
@@ -135,3 +135,32 @@ exports.console_create_post = [
     });
   },
 ]
+
+// Display Console delete form on GET
+exports.console_delete_get = (req, res, next) => {
+  async.parallel(
+    {
+      console(callback) {
+        Console.findById(req.params.id).exec(callback);
+      },
+      console_games(callback) {
+        Game.find({ console: req.params.id }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      if (results.console == null) {
+        // No results
+        res.redirect('/catalog/consoles');
+      }
+      // Successful, so render
+      res.render('console_delete', {
+        title: 'Delete Console',
+        vgconsole: results.console,
+        console_games: results.console_games,
+      });
+    }
+  );
+}

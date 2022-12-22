@@ -6,13 +6,13 @@ block content
   form(method='POST' action='') 
     div.form-group 
       label(for='console_name') Console: 
-      input#console_name.form-control(type='text' placeholder='Console' name='console_name' required='true' value=(undefined===console ? '' : console_name))
+      input#console_name.form-control(type='text' placeholder='Console' name='console_name' required='true' value=(undefined===vgconsole ? '' : console_name))
     div.form-group 
       label(for='console_about') About: 
-      input#console_about.form-control(type='text' placeholder='About' name='console_about' required='true' value=(undefined===console ? '' : console_about))
+      input#console_about.form-control(type='text' placeholder='About' name='console_about' required='true' value=(undefined===vgconsole ? '' : console_about))
     div.form-group 
       label(for='console_founded') Released: 
-      input#console_released.form-control(type='date' name='console_released' value=(undefined===console ? '' : console_released))
+      input#console_released.form-control(type='date' name='console_released' required='true' value=(undefined===vgconsole ? '' : console_released))
     button.btn(type='submit') Submit
     if errors 
       ul 

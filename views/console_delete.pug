@@ -1,0 +1,27 @@
+extends layout 
+
+block content 
+  h1 #{title}: #{vgconsole.name} 
+
+  if console_games.length 
+
+    p #[strong Delete the following games before attempting to delete this console.]
+
+    div
+
+      h4 Games 
+
+      dl 
+        each game in console_games 
+          dt 
+            a(href=game.url) #{game.name} 
+          dd #{game.about} 
+
+  else 
+    p Do you really want to delete this console? 
+
+    form(method='POST' action='') 
+      div.form-group 
+        input#consoleid.form-control(type='hidden' name='consoleid' required='true' value=vgconsole._id)
+
+      button.btn(type='submit') Delete  
