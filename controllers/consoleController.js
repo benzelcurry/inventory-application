@@ -80,3 +80,8 @@ exports.console_detail = (req, res, next) => {
     }
   );
 }
+
+// Display Console creation form on GET
+exports.console_create_get = function(req, res, next) {
+  res.render('console_form', { title: 'Add Console' });
+}

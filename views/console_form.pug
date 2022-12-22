@@ -1,0 +1,21 @@
+extends layout 
+
+block content 
+  h1= title 
+
+  form(method='POST' action='') 
+    div.form-group 
+      label(for='console_name') Console: 
+      input#console_name.form-control(type='text' placeholder='console' name='console_name' required='true' value=(undefined===console ? '' : console_name))
+    div.form-group 
+      label(for='console_about') About: 
+      input#console_about.form-control(type='text' placeholder='About' name='console_about' required='true' value=(undefined===console ? '' : console_about))
+    div.form-group 
+      label(for='console_founded') Released: 
+      input#console_released.form-control(type='date' name='console_released' value=(undefined===console ? '' : console_released))
+    button.btn(type='submit') Submit
+    if errors 
+      ul 
+        for error in errors 
+          li!= error.msg
+  

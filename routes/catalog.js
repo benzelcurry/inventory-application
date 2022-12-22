@@ -15,6 +15,9 @@ router.get('/', console_controller.index);
 // GET request for list of all Console items.
 router.get('/consoles', console_controller.console_list);
 
+// GET request for creating Console items
+router.get('/consoles/create', console_controller.console_create_get);
+
 // GET request for Console details.
 router.get('/consoles/:id', console_controller.console_detail);
 
@@ -24,7 +27,7 @@ router.get('/consoles/:id', console_controller.console_detail);
 // GET request for list of all Studio items
 router.get('/studios', studio_controller.studio_list);
 
-// GET request for creating Studio
+// GET request for creating Studio items
 router.get('/studios/create', studio_controller.studio_create_get);
 
 // POST request for creating Studio
