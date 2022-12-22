@@ -18,6 +18,9 @@ router.get('/consoles', console_controller.console_list);
 // GET request for creating Console items
 router.get('/consoles/create', console_controller.console_create_get);
 
+// POST request for creating Console items
+router.post('/consoles/create', console_controller.console_create_post);
+
 // GET request for Console details.
 router.get('/consoles/:id', console_controller.console_detail);
 

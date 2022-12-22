@@ -4,6 +4,7 @@ const Game = require('../models/game');
 const GameInstance = require('../models/gameInstance');
 
 const async = require('async');
+const { body, validationResult } = require('express-validator');
 
 exports.index = (req, res) => {
   async.parallel(
@@ -85,3 +86,52 @@ exports.console_detail = (req, res, next) => {
 exports.console_create_get = function(req, res, next) {
   res.render('console_form', { title: 'Add Console' });
 }
+
+// Handle Console create on POST
+exports.console_create_post = [
+  // Validate and sanitize fields
+  body("console_name")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("Console name must be specified."),
+  body("console_about")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("Console 'about' must be specified."),
+  body("console_date", "Invalid date")
+    .optional({ checkFalsy: true })
+    .isISO8601()
+    .toDate(),
+  // Process request after validation and sanitization.
+  (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render form again with sanitized values/errors messages.
+      res.render("console_form", {
+        title: "Add Console",
+        console: req.body,
+        errors: errors.array(),
+      });
+      return;
+    }
+    // Data from form is valid.
+
+    // Create a Studio object with escaped and trimmed data.
+    const console = new Console({
+      name: req.body.console_name,
+      about: req.body.console_about,
+      founded: req.body.console_founded,
+    });
+    console.save((err) => {
+      if (err) {
+        return next(err);
+      }
+      // Successful - redirect to new studio record.
+      res.redirect(console.url);
+    });
+  },
+]
