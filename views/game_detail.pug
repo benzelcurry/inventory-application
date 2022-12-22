@@ -6,6 +6,12 @@ block content
   h4 Release date
   div #{game.release_formatted}
 
+  h4 Studio 
+  if game.studio 
+    div #{game.studio.name} 
+  else 
+    div No studio info available
+
   h4 Console 
   if game.console 
     div #{game.console} 
