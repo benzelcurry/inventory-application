@@ -1,9 +1,10 @@
 const Game = require('../models/game');
 const Studio = require('../models/studio');
 const Console = require('../models/console');
+const GameInstance = require('../models/gameInstance');
 
 const async = require('async');
-const gameInstance = require('../models/gameInstance');
+const { body, validationResult } = require('express-validator');
 
 // Display lists of all Games
 exports.game_list = function (req, res, next) {
@@ -30,7 +31,7 @@ exports.game_detail = (req, res, next) => {
           .exec(callback);
       },
       game_instance(callback) {
-        gameInstance.find({ game: req.params.id }).exec(callback);
+        GameInstance.find({ game: req.params.id }).exec(callback);
       },
     },
     (err, results) => {
@@ -76,3 +77,81 @@ exports.game_create_get = (req, res, next) => {
     }
   );
 }
+
+// Handle Game creation on POST
+exports.game_create_post = [
+  // Validate and sanitize fields
+  body("game_name", 'Name field must not be empty')
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("game_about", 'About field must not be empty')
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body('studio', 'Studio field must not be empty')
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body('console', 'Console field must not be empty')
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("game_released", "Invalid date")
+    .optional({ checkFalsy: true })
+    .isISO8601()
+    .toDate(),
+  // Process request after validation and sanitization.
+  (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    // Create a Game object with escaped and trimmed data.
+    const game = new Game({
+      name: req.body.game_name,
+      studio: req.body.studio,
+      console: req.body.console,
+      about: req.body.game_about,
+      release: req.body.game_released,
+    });
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render form again with sanitized values/error messages.
+
+      // Get all authors and genres for form.
+      async.parallel(
+        {
+          studios(callback) {
+            Studio.find(callback);
+          },
+          consoles(callback) {
+            Console.find(callback);
+          },
+        },
+        (err, results) => {
+          if (err) {
+            return next(err);
+          }
+
+          res.render("game_form", {
+            title: "Add Game",
+            studios: results.studios,
+            consoles: results.consoles,
+            game,
+            errors: errors.array(),
+          });
+        }
+      );
+      return;
+    }
+
+    // Data from form is valid. Save game.
+    game.save((err) => {
+      if (err) {
+        return next(err);
+      }
+      // Successful: redirect to new game record.
+      res.redirect(game.url);
+    });
+  },
+]

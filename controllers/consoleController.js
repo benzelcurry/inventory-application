@@ -120,7 +120,7 @@ exports.console_create_post = [
     }
     // Data from form is valid.
 
-    // Create a Studio object with escaped and trimmed data.
+    // Create a Console object with escaped and trimmed data.
     const console = new Console({
       name: req.body.console_name,
       about: req.body.console_about,
