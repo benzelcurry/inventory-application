@@ -16,7 +16,7 @@ block content
       input#price.form-control(type='text' placeholder='Price' name='price' required='true' value=(undefined===gameinstance ? '' : gameinstance.price))
     div.form-group
       label(for='condition') Condition:
-      select#status.form-control(type='select' placeholder='Select status' name='status' required='true')
+      select#condition.form-control(type='select' placeholder='Select status' name='condition' required='true')
         option(value='Mint')= 'Mint'
         option(value='NM (Near Mint)')= 'NM (Near Mint)'
         option(value='EX (Excellent)')= 'EX (Excellent'

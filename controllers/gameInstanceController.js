@@ -55,3 +55,70 @@ exports.gameInstance_create_get = (req, res, next) => {
     });
   });
 }
+
+// Handle Game Instance listing creation on POST
+exports.gameInstance_create_post = [
+  // Validate and sanitize fields
+  body("game", 'Game field must not be empty')
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("price")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage('Price field must not be empty')
+    .isFloat({ min: 0, max: 10000})
+    .withMessage('Price must be between $0 and $10,000'),
+  body('condition', 'You must select the condition of the game')
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  // Process request after validation and sanitization.
+  (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    // Create a Game object with escaped and trimmed data.
+    const gameinstance = new GameInstance({
+      game: req.body.game,
+      price: req.body.price,
+      condition: req.body.condition,
+    });
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render form again with sanitized values/error messages.
+
+      // Get all authors and genres for form.
+      async.parallel(
+        {
+          games(callback) {
+            Game.find(callback);
+          },
+        },
+        (err, results) => {
+          if (err) {
+            return next(err);
+          }
+
+          res.render("gameInstance_form", {
+            title: "Create New Listing",
+            game_list: results.games,
+            gameinstance,
+            errors: errors.array(),
+          });
+        }
+      );
+      return;
+    }
+
+    // Data from form is valid. Save game.
+    gameinstance.save((err) => {
+      if (err) {
+        return next(err);
+      }
+      // Successful: redirect to new game record.
+      res.redirect(gameinstance.url);
+    });
+  },
+]

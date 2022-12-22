@@ -75,6 +75,9 @@ router.get('/listings', gameInstance_controller.gameInstance_list);
 // GET request for creating new listing of a Game Instance
 router.get('/listings/create', gameInstance_controller.gameInstance_create_get);
 
+// POST request for creating new listing of a Game Instance
+router.post('/listings/create', gameInstance_controller.gameInstance_create_post);
+
 // GET request for Game Instance details
 router.get('/listings/:id', gameInstance_controller.gameInstance_detail);
 
