@@ -1,0 +1,31 @@
+extends layout
+
+block content
+  h1=title
+
+  form(method='POST' action='')
+    div.form-group
+      label(for='game') Game:
+      game_list
+      select#game.form-control(type='select' placeholder='Select game' name='game' required='true')
+        - game_list.sort(function(a, b) {let textA = a.name.toUpperCase(); let textB = b.name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+        for game in game_list
+          option(value=game._id, selected=(selected_game==game._id.toString() ? 'selected' : false) ) #{game.name}
+    div.form-group
+      label(for='price') Price:
+      input#price.form-control(type='text' placeholder='Price' name='price' required='true' value=(undefined===gameinstance ? '' : gameinstance.price))
+    div.form-group
+      label(for='condition') Condition:
+      select#status.form-control(type='select' placeholder='Select status' name='status' required='true')
+        option(value='Mint')= 'Mint'
+        option(value='NM (Near Mint)')= 'NM (Near Mint)'
+        option(value='EX (Excellent)')= 'EX (Excellent'
+        option(value='GD (Good)')= 'GD (Good)'
+        option(value='PR (Poor)')= 'PR (Poor)'
+
+    button.btn.btn-primary(type='submit') Submit
+
+  if errors
+    ul
+      for error in errors
+        li!= error.msg

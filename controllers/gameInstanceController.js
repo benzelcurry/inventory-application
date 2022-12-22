@@ -2,6 +2,7 @@ const GameInstance = require('../models/gameInstance');
 const Game = require('../models/game');
 
 const async = require('async');
+const { body, validationResult } = require('express-validator');
 
 // Display list of all Game Instances
 exports.gameInstance_list = function (req, res, next) {
@@ -39,4 +40,18 @@ exports.gameInstance_detail = (req, res, next) => {
         gameinstance: gameinstance,
       });
     });
+}
+
+// Display Game Instance listing create form on GET
+exports.gameInstance_create_get = (req, res, next) => {
+  Game.find({}, 'name').exec((err, games) => {
+    if (err) {
+      return next(err);
+    }
+    // Successful, so render
+    res.render('gameInstance_form', {
+      title: 'Create New Listing',
+      game_list: games,
+    });
+  });
 }
