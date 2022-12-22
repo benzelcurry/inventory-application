@@ -164,3 +164,40 @@ exports.console_delete_get = (req, res, next) => {
     }
   );
 }
+
+// Handle Console delete on POST
+exports.console_delete_post = (req, res, next) => {
+  async.parallel(
+    {
+      console(callback) {
+        Console.findById(req.body.consoleid).exec(callback);
+      },
+      console_games(callback) {
+        Game.find({ console: req.body.consoleid }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      // Success
+      if (results.console_games.length > 0) {
+        // Console has games. Render in same was as for GET route
+        res.render('console_delete', {
+          title: 'Delete Console',
+          vgconsole: results.console,
+          console_games: results.console_games,
+        });
+        return;
+      }
+      // Console has no games. Delete object and redirect to the list of consoles.
+      Console.findByIdAndRemove(req.body.consoleid, (err) => {
+        if (err) {
+          return next(err);
+        }
+        // Success - go to console list
+        res.redirect('/catalog/consoles');
+      });
+    }
+  );
+}

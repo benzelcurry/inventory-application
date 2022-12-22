@@ -24,6 +24,9 @@ router.post('/consoles/create', console_controller.console_create_post);
 // GET request to delete Console
 router.get('/consoles/:id/delete', console_controller.console_delete_get);
 
+// POST request to delete Console
+router.post('/consoles/:id/delete', console_controller.console_delete_post);
+
 // GET request for Console details.
 router.get('/consoles/:id', console_controller.console_detail);
 
