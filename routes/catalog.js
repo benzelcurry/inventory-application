@@ -63,6 +63,9 @@ router.get('/games/create', game_controller.game_create_get);
 // POST request for creating Game
 router.post('/games/create', game_controller.game_create_post);
 
+// GET request to delete Game
+router.get('/games/:id/delete', game_controller.game_delete_get);
+
 // GET request for Game details
 router.get('/games/:id', game_controller.game_detail);
 

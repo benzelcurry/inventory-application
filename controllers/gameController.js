@@ -155,3 +155,32 @@ exports.game_create_post = [
     });
   },
 ]
+
+// Display Game deletion prompt on GET
+exports.game_delete_get = (req, res, next) => {
+  async.parallel(
+    {
+      game(callback) {
+        Game.findById(req.params.id).exec(callback);
+      },
+      game_instances(callback) {
+        GameInstance.find({ game: req.params.id }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      if (results.game == null) {
+        // No results
+        res.redirect('/catalog/games');
+      }
+      // Successful, so render
+      res.render('game_delete', {
+        title: 'Delete Game',
+        game: results.game,
+        game_instances: results.game_instances,
+      });
+    }
+  );
+}
