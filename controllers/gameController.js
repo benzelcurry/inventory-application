@@ -5,6 +5,7 @@ const GameInstance = require('../models/gameInstance');
 
 const async = require('async');
 const { body, validationResult } = require('express-validator');
+const game = require('../models/game');
 
 // Display lists of all Games
 exports.game_list = function (req, res, next) {
@@ -180,6 +181,43 @@ exports.game_delete_get = (req, res, next) => {
         title: 'Delete Game',
         game: results.game,
         game_instances: results.game_instances,
+      });
+    }
+  );
+}
+
+// Handle Game deletion on POST
+exports.game_delete_post = (req, res, next) => {
+  async.parallel(
+    {
+      game(callback) {
+        Game.findById(req.body.id).exec(callback);
+      },
+      game_instances(callback) {
+        GameInstance.find({ game: req.params.id }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      // Success
+      if (results.game_instances.length > 0) {
+        // Game has instances. Render in same way as for GET route
+        res.render('game_delete', {
+          title: 'Delete Game',
+          game: results.book,
+          game_instances: results.game_instances,
+        });
+        return;
+      }
+      // Game has no instances. Delete object and redirect to the list
+      Game.findByIdAndRemove(req.body.gameid, (err) => {
+        if (err) {
+          return next(err);
+        }
+        // Success - go to game list
+        res.redirect('/catalog/games');
       });
     }
   );
