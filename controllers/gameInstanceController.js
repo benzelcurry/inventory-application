@@ -147,3 +147,27 @@ exports.gameInstance_delete_get = (req, res, next) => {
     }
   );
 }
+
+// Handle POST request for listing deletion form
+exports.gameInstance_delete_post = (req, res, next) => {
+  async.parallel(
+    {
+      gameinstance(callback) {
+        GameInstance.findById(req.params.id).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      // Success
+      GameInstance.findByIdAndRemove(req.body.gameinstanceid, (err) => {
+        if (err) {
+          return next(err);
+        }
+        // Success - go to listings
+        res.redirect('/catalog/listings');
+      });
+    }
+  );
+}
