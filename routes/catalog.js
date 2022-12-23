@@ -84,6 +84,9 @@ router.get('/listings/create', gameInstance_controller.gameInstance_create_get);
 // POST request for creating new listing of a Game Instance
 router.post('/listings/create', gameInstance_controller.gameInstance_create_post);
 
+// GET request for deleting listing of a Game Instance
+router.get('/listings/:id/delete', gameInstance_controller.gameInstance_delete_get);
+
 // GET request for Game Instance details
 router.get('/listings/:id', gameInstance_controller.gameInstance_detail);
 

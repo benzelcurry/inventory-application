@@ -122,3 +122,28 @@ exports.gameInstance_create_post = [
     });
   },
 ]
+
+// Handle GET request for listing deletion form
+exports.gameInstance_delete_get = (req, res, next) => {
+  async.parallel(
+    {
+      gameinstance(callback) {
+        GameInstance.findById(req.params.id).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      if (results.gameinstance == null) {
+        // No results
+        res.redirect('/catalog/listings');
+      }
+      // Successful, so render
+      res.render('gameInstance_delete', {
+        title: 'Delete Game Instance',
+        gameinstance: results.gameinstance,
+      });
+    }
+  );
+}
