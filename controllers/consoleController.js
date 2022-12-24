@@ -201,3 +201,37 @@ exports.console_delete_post = (req, res, next) => {
     }
   );
 }
+
+// Handle Console update on GET
+exports.console_update_get = (req, res, next) => {
+  async.parallel(
+    {
+      console(callback) {
+        Console.findById(req.params.id) 
+          .populate('name')
+          .populate('about')
+          .populate('release')
+          .exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      if (results.console == null) {
+        // No results
+        const err = new Error('Console not found');
+        err.status = 404;
+        return next(err);
+      }
+      // Success
+      res.render('console_form', {
+        title: 'Update Console',
+        vgconsole: results.console,
+        console_name: results.console.name,
+        console_about: results.console.about,
+        console_released: results.console.release,
+      });
+    }
+  );
+}
