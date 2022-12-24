@@ -30,6 +30,9 @@ router.post('/consoles/:id/delete', console_controller.console_delete_post);
 // GET request for updating Console
 router.get('/consoles/:id/update', console_controller.console_update_get);
 
+// POST request for updating Console
+router.post('/consoles/:id/update', console_controller.console_update_post);
+
 // GET request for Console details.
 router.get('/consoles/:id', console_controller.console_detail);
 

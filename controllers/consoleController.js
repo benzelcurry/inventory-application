@@ -235,3 +235,73 @@ exports.console_update_get = (req, res, next) => {
     }
   );
 }
+
+// Handle console update on POST
+exports.console_update_post = [
+  // Validate and sanitize fields
+  body("console_name")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("Console name must be specified."),
+  body("console_about")
+    .trim()
+    .isLength({ min: 1 })
+    .withMessage("Console 'about' must be specified."),
+  body("console_date", "Invalid date")
+    .optional({ checkFalsy: true })
+    .isISO8601()
+    .toDate(),
+//sept26,1986
+  // Process request after validation and sanitization
+  (req, res, next) => {
+    // Extract the validation errors from a request
+    const errors = validationResult(req);
+
+    // Create a Console object with escaped/trimmed data and old ID
+    const console = new Console({
+      name: req.body.console_name,
+      about: req.body.console_about,
+      release: req.body.console_released,
+      _id: req.params.id, // This is required to prevent generating a new ID
+    });
+
+    if (!errors.isEmpty()) {
+      async.parallel(
+        {
+          console(callback) {
+            Console.findById(req.params.id)
+              .populate('name')
+              .populate('about')
+              .populate('release')
+              .exec(callback);
+          },
+        },
+        (err, results) => {
+          if (err) {
+            return next(err);
+          }
+
+          res.render('console_form', {
+            title: 'Update Book',
+            vgconsole: results.console,
+            console_name: results.console.name,
+            console_about: results.console.about,
+            console_released: results.console.release,
+          });
+        }
+      );
+      return;
+    }
+
+    // Data from form is valid. Update the record.
+    Console.findByIdAndUpdate(req.params.id, console, {}, (err, theconsole) => {
+      if (err) {
+        return next(err);
+      }
+
+      // Successful; redirect to console detail page
+      res.redirect(theconsole.url);
+    });
+  },
+];
