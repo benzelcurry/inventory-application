@@ -252,7 +252,7 @@ exports.console_update_post = [
     .optional({ checkFalsy: true })
     .isISO8601()
     .toDate(),
-//sept26,1986
+
   // Process request after validation and sanitization
   (req, res, next) => {
     // Extract the validation errors from a request
@@ -283,7 +283,7 @@ exports.console_update_post = [
           }
 
           res.render('console_form', {
-            title: 'Update Book',
+            title: 'Update Console',
             vgconsole: results.console,
             console_name: results.console.name,
             console_about: results.console.about,

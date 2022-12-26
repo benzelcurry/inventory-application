@@ -263,3 +263,79 @@ exports.game_update_get = (req, res, next) => {
     }
   );
 }
+
+// Handle Game update on POST
+exports.game_update_post = [
+  body('game_name', 'Game name must be specified')
+    .trim() 
+    .isLength({ min: 1 }),
+  body('game_about', "Game 'about' must be specified")
+    .trim() 
+    .isLength({ min: 1 }),
+  body('game_released', 'Invalid date')
+    .optional({ checkFalsy: true })
+    .isISO8601()
+    .toDate(),
+  
+  // Process request after validation and sanitization 
+  (req, res, next) => {
+    // Extract the validation errors from a request
+    const errors = validationResult(req);
+
+    // Create a Game object with escaped/trimmed data and **OLD** ID
+    const game = new Game({
+      name: req.body.game_name,
+      about: req.body.game_about,
+      studio: req.body.studio,
+      console: req.body.console,
+      release: req.body.game_released,
+      _id: req.params.id,
+    });
+
+    if (!errors.isEmpty()) {
+      async.parallel(
+        {
+          game(callback) {
+            Game.findById(req.params.id)
+              .populate('name') 
+              .populate('about') 
+              .populate('release') 
+              .exec(callback);
+          },
+          studios(callback) {
+            Studio.find(callback);
+          },
+          consoles(callback) {
+            Console.find(callback);
+          },
+        },
+        (err, results) => {
+          if (err) {
+            return next(err);
+          }
+
+          res.render('game_form', {
+            title: 'Update Game',
+            game: results.game,
+            studios: results.studios,
+            consoles: results.consoles,
+            game_name: results.game.name,
+            game_about: results.game.about,
+            game_released: results.game.release,
+          });
+        }
+      );
+      return;
+    }
+
+    // Data from form is valid. Update the record.
+    Game.findByIdAndUpdate(req.params.id, game, {}, (err, thegame) => {
+      if (err) {
+        return next(err);
+      }
+
+      // Successful; redirect to game detail page 
+      res.redirect(thegame.url);
+    });
+  },
+];

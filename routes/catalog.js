@@ -78,6 +78,9 @@ router.post('/games/:id/delete', game_controller.game_delete_post);
 // GET request for updating Game
 router.get('/games/:id/update', game_controller.game_update_get);
 
+// POST request for updating Game
+router.post('/games/:id/update', game_controller.game_update_post);
+
 // GET request for Game details
 router.get('/games/:id', game_controller.game_detail);
 
