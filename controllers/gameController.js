@@ -222,3 +222,44 @@ exports.game_delete_post = (req, res, next) => {
     }
   );
 }
+
+// Handle Game update on GET
+exports.game_update_get = (req, res, next) => {
+  async.parallel(
+    {
+      game(callback) {
+        Game.findById(req.params.id) 
+          .populate('name')
+          .populate('about')
+          .populate('release')
+          .exec(callback);
+      },
+      studios(callback) {
+        Studio.find(callback);
+      },
+      consoles(callback) {
+        Console.find(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      if (results.game == null) {
+        const err = new Error('Game not found');
+        err.status = 404;
+        return next(err);
+      }
+      // Success 
+      res.render('game_form', {
+        title: 'Update Game',
+        game: results.game,
+        studios: results.studios,
+        consoles: results.consoles,
+        game_name: results.game.name,
+        game_about: results.game.about,
+        game_released: results.game.release,
+      });
+    }
+  );
+}

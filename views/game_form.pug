@@ -13,7 +13,7 @@ block content
         - studios.sort(function(a, b) {let textA = a.name.toUpperCase(); let textB = b.name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
         for studio in studios
           if game 
-            //- Handle GET form, where book.studio is an object, and POST form, where it is a string
+            //- Handle GET form, where game.studio is an object, and POST form, where it is a string
             option(
               value=studio._id 
               selected=(
@@ -28,7 +28,7 @@ block content
         - consoles.sort(function(a, b) {let textA = a.name.toUpperCase(); let textB = b.name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
         for vgconsole in consoles
           if game 
-            //- Handle GET form, where book.vgconsole is an object, and POST form, where it is a string
+            //- Handle GET form, where game.vgconsole is an object, and POST form, where it is a string
             option(
               value=vgconsole._id 
               selected=(
@@ -44,16 +44,6 @@ block content
       label(for='game_released') Released: 
       input#game_released.form-control(type='date' name='game_released' required='true' value=(undefined===game ? '' : game_released))
     button.btn(type='submit') Submit
-
-  each studio in studios 
-    p #{studio.name}
-
-  div= studios.length 
-
-  each item in consoles 
-    p #{item.name} 
-  
-  div= consoles.length
 
     if errors 
       ul 
