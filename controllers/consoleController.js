@@ -93,12 +93,10 @@ exports.console_create_post = [
   body("console_name")
     .trim()
     .isLength({ min: 1 })
-    .escape()
     .withMessage("Console name must be specified."),
   body("console_about")
     .trim()
     .isLength({ min: 1 })
-    .escape()
     .withMessage("Console 'about' must be specified."),
   body("console_date", "Invalid date")
     .optional({ checkFalsy: true })
