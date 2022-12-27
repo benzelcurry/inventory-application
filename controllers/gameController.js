@@ -5,7 +5,6 @@ const GameInstance = require('../models/gameInstance');
 
 const async = require('async');
 const { body, validationResult } = require('express-validator');
-const game = require('../models/game');
 
 // Display lists of all Games
 exports.game_list = function (req, res, next) {
@@ -228,11 +227,7 @@ exports.game_update_get = (req, res, next) => {
   async.parallel(
     {
       game(callback) {
-        Game.findById(req.params.id) 
-          .populate('name')
-          .populate('about')
-          .populate('release')
-          .exec(callback);
+        Game.findById(req.params.id).exec(callback);
       },
       studios(callback) {
         Studio.find(callback);
@@ -296,11 +291,7 @@ exports.game_update_post = [
       async.parallel(
         {
           game(callback) {
-            Game.findById(req.params.id)
-              .populate('name') 
-              .populate('about') 
-              .populate('release') 
-              .exec(callback);
+            Game.findById(req.params.id).exec(callback);
           },
           studios(callback) {
             Studio.find(callback);
