@@ -111,6 +111,9 @@ router.post('/listings/:id/delete', gameInstance_controller.gameInstance_delete_
 // GET request for updating listing of a Game Instance
 router.get('/listings/:id/update', gameInstance_controller.gameInstance_update_get);
 
+// POST request for updating listing of a Game Instance
+router.post('/listings/:id/update', gameInstance_controller.gameInstance_update_post);
+
 // GET request for Game Instance details
 router.get('/listings/:id', gameInstance_controller.gameInstance_detail);
 

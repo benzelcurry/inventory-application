@@ -13,7 +13,7 @@ block content
           option(value=item._id, selected=(game==item._id.toString() ? true : false) ) #{item.name}
     div.form-group
       label(for='price') Price:
-      input#price.form-control(type='text' placeholder='Price' name='price' required='true' value=(undefined===gameinstance ? '' : gameinstance.price))
+      input#price.form-control(type='number' placeholder='Price' name='price' required='true' value=(undefined===gameinstance ? '' : gameinstance.price))
     div.form-group
       label(for='condition') Condition:
       select#condition.form-control(type='select' placeholder='Select status' name='condition' required='true')

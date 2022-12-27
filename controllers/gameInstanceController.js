@@ -204,3 +204,71 @@ exports.gameInstance_update_get = (req, res, next) => {
     }
   );
 }
+
+// Handle POST request for updating listings
+exports.gameInstance_update_post = [
+  body("game", 'Game field must not be empty')
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("price")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage('Price field must not be empty')
+    .isFloat({ min: 0, max: 10000})
+    .withMessage('Price must be between $0 and $10,000'),
+  body('condition', 'You must select the condition of the game')
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+
+  // Process request after validation and sanitization
+  (req, res, next) => {
+    // Extract the validation errors from a request
+    const errors = validationResult(req);
+
+    // Create a Game Instance object with escaped/trimmed data and old ID
+    const gameinstance = new GameInstance({
+      game: req.body.game,
+      price: req.body.price,
+      condition: req.body.condition,
+      _id: req.params.id,
+    });
+
+    if (!errors.isEmpty()) {
+      async.parallel(
+        {
+          gameinstance(callback) {
+            GameInstance.findById(req.params.id).exec(callback);
+          },
+        },
+        (err, results) => {
+          if (err) {
+            return next(err);
+          }
+
+          res.render('gameInstance_form', {
+            title: 'Update Listing',
+            gameinstance: results.gameinstance,
+            game_list: results.game,
+            game: results.gameinstance.game,
+            price: results.gameinstance.price,
+            condition: results.gameinstance.condition,
+          });
+        }
+      );
+      return;
+    }
+
+    // Data from form is valid. Update the record.
+    GameInstance.findByIdAndUpdate(req.params.id, gameinstance, {}, (err, thelisting) => {
+      if (err) {
+        return next(err);
+      }
+
+      // Successful; redirect to the listing page
+      res.redirect(thelisting.url);
+    });
+  }
+];
