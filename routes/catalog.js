@@ -54,6 +54,9 @@ router.get('/studios/:id/delete', studio_controller.studio_delete_get);
 // POST request to delete Studio 
 router.post('/studios/:id/delete', studio_controller.studio_delete_post);
 
+// GET request for updating Studio
+router.get('/studios/:id/update', studio_controller.studio_update_get);
+
 // GET request for Studio details
 router.get('/studios/:id', studio_controller.studio_detail);
 

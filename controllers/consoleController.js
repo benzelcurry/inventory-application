@@ -207,11 +207,7 @@ exports.console_update_get = (req, res, next) => {
   async.parallel(
     {
       console(callback) {
-        Console.findById(req.params.id) 
-          .populate('name')
-          .populate('about')
-          .populate('release')
-          .exec(callback);
+        Console.findById(req.params.id).exec(callback);
       },
     },
     (err, results) => {
@@ -270,11 +266,7 @@ exports.console_update_post = [
       async.parallel(
         {
           console(callback) {
-            Console.findById(req.params.id)
-              .populate('name')
-              .populate('about')
-              .populate('release')
-              .exec(callback);
+            Console.findById(req.params.id).exec(callback);
           },
         },
         (err, results) => {

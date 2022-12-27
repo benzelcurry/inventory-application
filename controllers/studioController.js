@@ -3,6 +3,7 @@ const Game = require('../models/game');
 
 const async = require('async');
 const { body, validationResult } = require('express-validator');
+const studio = require('../models/studio');
 
 // Display list of all Studios
 exports.studio_list = function (req, res, next) {
@@ -175,6 +176,36 @@ exports.studio_delete_post = (req, res, next) => {
         }
         // Success - go to studio list
         res.redirect('/catalog/studios');
+      });
+    }
+  );
+}
+
+// Handle studio update on GET
+exports.studio_update_get = (req, res, next) => {
+  async.parallel(
+    {
+      studio(callback) {
+        Studio.findById(req.params.id).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      if (results.studio == null) {
+        const err = new Error('Studio not found');
+        err.status = 404;
+        return next(err);
+      }
+      // Success
+      res.render('studio_form', {
+        title: 'Update Studio',
+        studio: results.studio,
+        studio_name: results.studio.name,
+        studio_location: results.studio.location,
+        studio_about: results.studio.about,
+        studio_founded: results.studio.founded,
       });
     }
   );
