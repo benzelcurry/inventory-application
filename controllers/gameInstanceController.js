@@ -171,3 +171,36 @@ exports.gameInstance_delete_post = (req, res, next) => {
     }
   );
 }
+
+// Handle GET request for updating listings
+exports.gameInstance_update_get = (req, res, next) => {
+  async.parallel(
+    {
+      gameinstance(callback) {
+        GameInstance.findById(req.params.id).exec(callback);
+      },
+      game(callback) {
+        Game.find(callback);
+      }
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      if (results.gameinstance == null) {
+        const err = new Error('Listing not found');
+        err.status = 404;
+        return next(err);
+      }
+
+      res.render('gameInstance_form', {
+        title: 'Update Listing',
+        gameinstance: results.gameinstance,
+        game_list: results.game,
+        game: results.gameinstance.game,
+        price: results.gameinstance.price,
+        condition: results.gameinstance.condition,
+      });
+    }
+  );
+}

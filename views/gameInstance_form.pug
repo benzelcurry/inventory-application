@@ -9,19 +9,19 @@ block content
       game_list
       select#game.form-control(type='select' placeholder='Select game' name='game' required='true')
         - game_list.sort(function(a, b) {let textA = a.name.toUpperCase(); let textB = b.name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
-        for game in game_list
-          option(value=game._id, selected=(selected_game==game._id.toString() ? 'selected' : false) ) #{game.name}
+        for item in game_list
+          option(value=item._id, selected=(game==item._id.toString() ? true : false) ) #{item.name}
     div.form-group
       label(for='price') Price:
       input#price.form-control(type='text' placeholder='Price' name='price' required='true' value=(undefined===gameinstance ? '' : gameinstance.price))
     div.form-group
       label(for='condition') Condition:
       select#condition.form-control(type='select' placeholder='Select status' name='condition' required='true')
-        option(value='Mint')= 'Mint'
-        option(value='NM (Near Mint)')= 'NM (Near Mint)'
-        option(value='EX (Excellent)')= 'EX (Excellent'
-        option(value='GD (Good)')= 'GD (Good)'
-        option(value='PR (Poor)')= 'PR (Poor)'
+        option(value='Mint' selected=(condition === 'Mint' ? true : false))= 'Mint'
+        option(value='NM (Near Mint)' selected=(condition === 'NM (Near Mint)' ? true : false))= 'NM (Near Mint)'
+        option(value='EX (Excellent)' selected=(condition === 'EX (Excellent)' ? true : false))= 'EX (Excellent'
+        option(value='GD (Good)' selected=(condition === 'GD (Good)' ? true : false))= 'GD (Good)'
+        option(value='PR (Poor)' selected=(condition === 'PR (Poor)' ? true : false))= 'PR (Poor)'
 
     button.btn.btn-primary(type='submit') Submit
 
