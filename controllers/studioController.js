@@ -65,9 +65,7 @@ exports.studio_create_post = [
     .trim()
     .isLength({ min: 1 })
     .escape()
-    .withMessage("Studio name must be specified.")
-    .isAlphanumeric()
-    .withMessage("Studio name has non-alphanumeric characters."),
+    .withMessage("Studio name must be specified."),
   body("studio_about")
     .trim()
     .isLength({ min: 1 })
@@ -91,7 +89,11 @@ exports.studio_create_post = [
       // There are errors. Render form again with sanitized values/errors messages.
       res.render("studio_form", {
         title: "Add Studio",
-        studio: req.body,
+        studio: true,
+        studio_name: req.body.studio_name,
+        studio_location: req.body.studio_location,
+        studio_about: req.body.studio_about,
+        studio_founded: req.body.studio_founded,
         errors: errors.array(),
       });
       return;
@@ -210,3 +212,72 @@ exports.studio_update_get = (req, res, next) => {
     }
   );
 }
+
+// Handle studio update on POST
+exports.studio_update_post = [
+  // Validate and sanitize fields
+  body('studio_name', 'Studio name must be specified')
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body('studio_location', 'Studio location must be specified')
+    .trim()
+    .isLength({ min: 1 }),
+  body('studio_about', 'Studio description must be specified')
+    .trim()
+    .isLength({ min: 1 }),
+  body('studio_founded', 'Invalid date')
+    .optional({ checkFalsy: true })
+    .isISO8601()
+    .toDate(),
+
+  // Process request after validation and sanitization
+  (req, res, next) => {
+    // Extract the validation errors from a request
+    const errors = validationResult(req);
+
+    // Create a Studio object with escaped/trimmed data and old ID
+    const studio = new Studio({
+      name: req.body.studio_name,
+      location: req.body.studio_location,
+      about: req.body.studio_about,
+      founded: req.body.studio_founded,
+      _id: req.params.id,
+    });
+
+    if (!errors.isEmpty()) {
+      async.parallel(
+        {
+          studio(callback) {
+            Studio.findById(req.params.id).exec(callback);
+          },
+        },
+        (err, results) => {
+          if (err) {
+            return next(err);
+          }
+
+          res.render('studio_form', {
+            title: 'Update Studio',
+            studio: results.studio,
+            studio_name: results.studio.name,
+            studio_location: results.studio.location,
+            studio_about: results.studio.about,
+            studio_founded: results.studio.founded,
+          });
+        }
+      );
+      return;
+    }
+
+    // Data from form is valid. Update the record.
+    Studio.findByIdAndUpdate(req.params.id, studio, {}, (err, thestudio) => {
+      if (err) {
+        return next(err);
+      }
+
+      // Successful; redirect to the studio detail page
+      res.redirect(thestudio.url);
+    });
+  },
+];

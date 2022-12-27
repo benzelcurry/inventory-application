@@ -243,7 +243,7 @@ exports.console_update_post = [
   body("console_about")
     .trim()
     .isLength({ min: 1 })
-    .withMessage("Console 'about' must be specified."),
+    .withMessage("Console description must be specified."),
   body("console_date", "Invalid date")
     .optional({ checkFalsy: true })
     .isISO8601()
