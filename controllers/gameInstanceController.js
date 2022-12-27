@@ -125,6 +125,28 @@ exports.gameInstance_create_post = [
 
 // Handle GET request for listing deletion form
 exports.gameInstance_delete_get = (req, res, next) => {
+  const reject = () => {
+    res.setHeader("www-authenticate", "Basic");
+    res.sendStatus(401);
+  };
+
+  const authorization = req.headers.authorization;
+
+  if (!authorization) {
+    return reject();
+  }
+
+  const [username, password] = Buffer.from(
+    authorization.replace("Basic ", ""),
+    "base64"
+  )
+    .toString()
+    .split(":");
+
+  if (!(username === "admin" && password === "passw0rd")) {
+    return reject();
+  }
+  
   async.parallel(
     {
       gameinstance(callback) {
@@ -195,7 +217,7 @@ exports.gameInstance_update_get = (req, res, next) => {
   if (!(username === "admin" && password === "passw0rd")) {
     return reject();
   }
-  
+
   async.parallel(
     {
       gameinstance(callback) {
